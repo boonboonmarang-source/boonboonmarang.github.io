@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX Mobile — Premium Store</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f5f0;
+  --surface: #ffffff;
+  --surface2: #f0f0ea;
+  --text: #1a1a1a;
+  --text2: #6e6e6e;
+  --border: #e0e0da;
+  --accent: #1a1a1a;
+  --accent2: #0066cc;
+  --danger: #ff3b30;
+  --success: #34c759;
+  --radius: 18px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.07);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+  --nav-h: 64px;
+  --font: 'DM Sans', sans-serif;
+  --font-serif: 'DM Serif Display', serif;
+}
+body.dark {
+  --bg: #0a0a0a;
+  --surface: #161616;
+  --surface2: #1e1e1e;
+  --text: #f5f5f0;
+  --text2: #8e8e8e;
+  --border: #2a2a2a;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:500;
+  height:var(--nav-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;
+  background:rgba(245,245,240,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:background .3s,border .3s;
+}
+body.dark nav{background:rgba(10,10,10,0.85);}
+.nav-logo{font-family:var(--font-serif);font-size:1.4rem;letter-spacing:-.02em;color:var(--text);}
+.nav-center{display:flex;gap:28px;}
+.nav-center a{font-size:.875rem;color:var(--text2);text-decoration:none;transition:color .2s;cursor:pointer;}
+.nav-center a:hover{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;border:none;
+  background:var(--surface2);color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;transition:background .2s;position:relative;
+}
+.icon-btn:hover{background:var(--border);}
+.badge{
+  position:absolute;top:-3px;right:-3px;
+  background:var(--danger);color:#fff;
+  font-size:10px;font-weight:700;
+  min-width:18px;height:18px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;padding:0 4px;
+  display:none;
+}
+.badge.show{display:flex;}
+.nav-user-btn{
+  padding:7px 16px;border-radius:20px;border:none;
+  background:var(--accent);color:#fff;
+  font-family:var(--font);font-size:.8rem;font-weight:500;
+  cursor:pointer;transition:opacity .2s;
+}
+.nav-user-btn:hover{opacity:.8;}
+
+/* ── HERO ── */
+.hero{
+  padding:80px 40px 60px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,204,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-block;
+  font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent2);margin-bottom:16px;
+}
+.hero h1{
+  font-family:var(--font-serif);
+  font-size:clamp(2.5rem,5vw,4rem);
+  font-weight:400;line-height:1.1;
+  color:var(--text);margin-bottom:16px;
+  letter-spacing:-.02em;
+}
+.hero h1 em{font-style:italic;color:var(--accent2);}
+.hero p{font-size:1.05rem;color:var(--text2);max-width:480px;margin:0 auto 32px;line-height:1.6;}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{
+  padding:13px 28px;border-radius:30px;border:none;
+  background:var(--accent);color:#fff;
+  font-family:var(--font);font-size:.9rem;font-weight:500;
+  cursor:pointer;transition:transform .2s,opacity .2s;
+}
+.btn-primary:hover{opacity:.85;transform:translateY(-1px);}
+.btn-ghost{
+  padding:13px 28px;border-radius:30px;
+  border:1.5px solid var(--border);
+  background:transparent;color:var(--text);
+  font-family:var(--font);font-size:.9rem;font-weight:500;
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.btn-ghost:hover{border-color:var(--text2);background:var(--surface2);}
+
+/* ── FILTERS ── */
+.filter-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:0 40px 32px;
+}
+.filter-label{font-size:.85rem;color:var(--text2);font-weight:500;margin-right:6px;}
+.filter-chip{
+  padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);
+  background:transparent;color:var(--text2);
+  font-family:var(--font);font-size:.82rem;cursor:pointer;
+  transition:all .2s;
+}
+.filter-chip:hover,.filter-chip.active{
+  background:var(--accent);color:#fff;border-color:var(--accent);
+}
+.sort-select{
+  margin-left:auto;
+  padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);
+  font-family:var(--font);font-size:.82rem;cursor:pointer;outline:none;
+}
+
+/* ── SEARCH (full width under hero) ── */
+.search-bar-wrap{
+  padding:0 40px 32px;
+  display:flex;gap:12px;
+}
+.search-input{
+  flex:1;padding:13px 20px;border-radius:14px;
+  border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);
+  font-family:var(--font);font-size:.9rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.search-input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(0,102,204,0.1);}
+.search-input::placeholder{color:var(--text2);}
+
+/* ── PRODUCT GRID ── */
+.grid-wrap{padding:0 40px 80px;}
+.grid-label{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-bottom:20px;}
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+
+/* ── PRODUCT CARD ── */
+.p-card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+  animation:fadeIn .5s ease both;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.p-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+
+.p-card-img{
+  width:100%;aspect-ratio:4/3;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+.p-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.p-card:hover .p-card-img img{transform:scale(1.04);}
+.p-card-img .fallback{font-size:64px;opacity:.3;}
+
+.p-badge{
+  position:absolute;top:12px;left:12px;
+  padding:4px 10px;border-radius:10px;
+  font-size:.7rem;font-weight:700;letter-spacing:.05em;
+}
+.p-badge.new{background:#0066cc;color:#fff;}
+.p-badge.hot{background:#ff3b30;color:#fff;}
+.p-badge.sale{background:#ff9500;color:#fff;}
+
+.wishlist-btn{
+  position:absolute;top:10px;right:10px;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,0.8);backdrop-filter:blur(10px);
+  border:none;font-size:.9rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,background .2s;
+  color:#1a1a1a;
+}
+body.dark .wishlist-btn{background:rgba(40,40,40,0.8);color:#fff;}
+.wishlist-btn:hover{transform:scale(1.1);}
+.wishlist-btn.active{background:#ff3b30;}
+
+.p-card-body{padding:18px;}
+.p-brand{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);}
+.p-name{font-size:1.05rem;font-weight:500;margin:4px 0 8px;color:var(--text);}
+.p-stars{color:#ff9500;font-size:.8rem;margin-bottom:10px;}
+.p-stars span{color:var(--text2);margin-left:4px;font-size:.78rem;}
+
+.color-dots{display:flex;gap:6px;margin-bottom:14px;}
+.color-dot{width:16px;height:16px;border-radius:50%;border:2px solid transparent;transition:transform .15s;cursor:pointer;}
+.color-dot:hover{transform:scale(1.2);}
+.color-dot.selected{border-color:var(--text);}
+
+.p-card-footer{display:flex;align-items:center;justify-content:space-between;}
+.p-price-wrap{}
+.p-price-old{font-size:.78rem;color:var(--text2);text-decoration:line-through;}
+.p-price{font-size:1.1rem;font-weight:600;color:var(--text);}
+.add-btn{
+  width:36px;height:36px;border-radius:50%;border:none;
+  background:var(--accent);color:#fff;font-size:1.1rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,opacity .2s;
+}
+.add-btn:hover{opacity:.8;transform:scale(1.1);}
+
+/* ── MODAL BASE ── */
+.overlay{
+  position:fixed;inset:0;z-index:800;
+  background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.overlay.open{display:flex;}
+
+/* ── PRODUCT DETAIL MODAL ── */
+.detail-modal{
+  background:var(--surface);border-radius:24px;
+  width:100%;max-width:840px;max-height:90vh;overflow-y:auto;
+  position:relative;animation:slideUp .35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.dm-close{
+  position:absolute;top:16px;right:16px;z-index:10;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface2);border:none;
+  font-size:1rem;cursor:pointer;color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+}
+.dm-inner{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+@media(max-width:600px){.dm-inner{grid-template-columns:1fr;}}
+.dm-img{
+  aspect-ratio:1;background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  border-radius:24px 0 0 24px;
+}
+@media(max-width:600px){.dm-img{border-radius:24px 24px 0 0;aspect-ratio:4/3;}}
+.dm-img img{width:100%;height:100%;object-fit:cover;}
+.dm-info{padding:36px 32px;}
+.dm-brand{font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);}
+.dm-name{font-family:var(--font-serif);font-size:1.8rem;font-weight:400;margin:8px 0 4px;line-height:1.2;}
+.dm-stars{color:#ff9500;font-size:.9rem;margin-bottom:16px;}
+.dm-desc{font-size:.88rem;color:var(--text2);line-height:1.7;margin-bottom:24px;}
+
+.dm-section-label{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin-bottom:10px;}
+
+.color-options{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+.color-option{
+  display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;
+}
+.color-option .swatch{
+  width:32px;height:32px;border-radius:50%;
+  border:2px solid transparent;transition:all .2s;
+}
+.color-option:hover .swatch{transform:scale(1.1);}
+.color-option.selected .swatch{border-color:var(--text);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--text);}
+.color-option span{font-size:.65rem;color:var(--text2);text-align:center;}
+
+.storage-options{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.storage-btn{
+  padding:8px 18px;border-radius:10px;
+  border:1.5px solid var(--border);
+  background:transparent;color:var(--text2);
+  font-family:var(--font);font-size:.82rem;cursor:pointer;
+  transition:all .2s;
+}
+.storage-btn:hover{border-color:var(--text2);}
+.storage-btn.selected{border-color:var(--accent);background:var(--accent);color:#fff;}
+
+.dm-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:24px;}
+.dm-price{font-size:1.8rem;font-weight:600;}
+.dm-price-old{font-size:1rem;color:var(--text2);text-decoration:line-through;}
+.dm-installment{font-size:.78rem;color:var(--text2);}
+
+.dm-actions{display:flex;flex-direction:column;gap:10px;}
+.dm-add-btn{
+  padding:14px;border-radius:14px;border:none;
+  background:var(--accent);color:#fff;
+  font-family:var(--font);font-size:.95rem;font-weight:500;
+  cursor:pointer;transition:opacity .2s;
+}
+.dm-add-btn:hover{opacity:.85;}
+.dm-wishlist-btn{
+  padding:14px;border-radius:14px;
+  border:1.5px solid var(--border);
+  background:transparent;color:var(--text);
+  font-family:var(--font);font-size:.95rem;font-weight:500;
+  cursor:pointer;transition:background .2s;
+}
+.dm-wishlist-btn:hover{background:var(--surface2);}
+
+.dm-specs{border-top:1px solid var(--border);margin-top:24px;padding-top:20px;}
+.spec-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.83rem;}
+.spec-row:last-child{border-bottom:none;}
+.spec-key{color:var(--text2);}
+.spec-val{font-weight:500;}
+
+/* ── CART PANEL ── */
+.cart-panel{
+  position:fixed;top:0;right:0;bottom:0;z-index:900;
+  width:420px;max-width:100vw;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.cart-panel.open{transform:translateX(0);}
+.cart-bg{
+  position:fixed;inset:0;z-index:890;
+  background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);
+  display:none;
+}
+.cart-bg.open{display:block;}
+.cart-header{
+  padding:24px 24px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cart-title{font-family:var(--font-serif);font-size:1.4rem;}
+.cart-close{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--surface2);border:none;
+  font-size:1rem;cursor:pointer;color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+}
+.cart-items{flex:1;overflow-y:auto;padding:16px 24px;}
+.cart-empty{text-align:center;padding:60px 20px;color:var(--text2);}
+.cart-empty-icon{font-size:3rem;display:block;margin-bottom:12px;}
+.cart-item{
+  display:flex;gap:14px;padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.ci-img{
+  width:72px;height:72px;border-radius:12px;
+  background:var(--surface2);overflow:hidden;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.ci-img img{width:100%;height:100%;object-fit:cover;}
+.ci-info{flex:1;}
+.ci-name{font-weight:500;font-size:.9rem;margin-bottom:3px;}
+.ci-meta{font-size:.75rem;color:var(--text2);margin-bottom:8px;}
+.ci-price{font-size:.95rem;font-weight:600;}
+.ci-actions{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.qty-btn{
+  width:26px;height:26px;border-radius:8px;
+  border:1px solid var(--border);background:var(--surface2);
+  color:var(--text);cursor:pointer;font-size:.9rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.qty-num{font-size:.85rem;font-weight:600;min-width:20px;text-align:center;}
+.ci-remove{margin-left:auto;background:none;border:none;color:var(--danger);cursor:pointer;font-size:.8rem;}
+.cart-footer{padding:20px 24px;border-top:1px solid var(--border);}
+.cart-summary{margin-bottom:16px;}
+.cart-row{display:flex;justify-content:space-between;font-size:.88rem;color:var(--text2);margin-bottom:8px;}
+.cart-row.total{font-size:1rem;font-weight:600;color:var(--text);}
+.checkout-btn{
+  width:100%;padding:15px;border-radius:14px;border:none;
+  background:var(--accent);color:#fff;
+  font-family:var(--font);font-size:1rem;font-weight:500;
+  cursor:pointer;transition:opacity .2s;
+}
+.checkout-btn:hover{opacity:.85;}
+
+/* ── AUTH MODAL ── */
+.auth-modal{
+  background:var(--surface);border-radius:24px;
+  width:100%;max-width:420px;
+  padding:40px;
+  animation:slideUp .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+.auth-close{
+  position:absolute;top:16px;right:16px;
+  width:34px;height:34px;border-radius:50%;
+  background:var(--surface2);border:none;
+  font-size:.9rem;cursor:pointer;color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+}
+.auth-logo{font-family:var(--font-serif);font-size:1.6rem;text-align:center;margin-bottom:6px;}
+.auth-sub{text-align:center;color:var(--text2);font-size:.85rem;margin-bottom:28px;}
+.auth-tabs{display:flex;background:var(--surface2);border-radius:12px;padding:4px;margin-bottom:24px;}
+.auth-tab{
+  flex:1;padding:9px;border-radius:9px;border:none;
+  background:transparent;color:var(--text2);
+  font-family:var(--font);font-size:.85rem;cursor:pointer;transition:all .2s;
+}
+.auth-tab.active{background:var(--surface);color:var(--text);font-weight:600;box-shadow:var(--shadow);}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:.78rem;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase;}
+.form-input{
+  width:100%;padding:12px 16px;border-radius:12px;
+  border:1.5px solid var(--border);
+  background:var(--surface2);color:var(--text);
+  font-family:var(--font);font-size:.9rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.form-input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(0,102,204,0.1);}
+.auth-submit{
+  width:100%;padding:14px;border-radius:12px;border:none;
+  background:var(--accent);color:#fff;
+  font-family:var(--font);font-size:.95rem;font-weight:600;
+  cursor:pointer;margin-top:8px;transition:opacity .2s;
+}
+.auth-submit:hover{opacity:.85;}
+.auth-error{background:#fff0f0;border:1px solid #ffd0cc;border-radius:10px;padding:10px 14px;font-size:.83rem;color:var(--danger);margin-bottom:12px;display:none;}
+body.dark .auth-error{background:rgba(255,59,48,0.1);border-color:rgba(255,59,48,0.3);}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text2);font-size:.8rem;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.social-btn{
+  width:100%;padding:12px;border-radius:12px;
+  border:1.5px solid var(--border);background:var(--surface);
+  color:var(--text);font-family:var(--font);font-size:.88rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .2s;
+}
+.social-btn:hover{background:var(--surface2);}
+
+/* ── WISHLIST MODAL ── */
+.wishlist-modal{
+  background:var(--surface);border-radius:24px;
+  width:100%;max-width:640px;max-height:80vh;overflow-y:auto;
+  padding:32px;
+  animation:slideUp .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+.wl-title{font-family:var(--font-serif);font-size:1.5rem;margin-bottom:20px;}
+.wl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
+.wl-card{
+  background:var(--surface2);border-radius:14px;overflow:hidden;
+  cursor:pointer;transition:transform .2s;
+}
+.wl-card:hover{transform:translateY(-3px);}
+.wl-img{width:100%;aspect-ratio:1;object-fit:cover;}
+.wl-info{padding:10px;}
+.wl-name{font-size:.83rem;font-weight:500;margin-bottom:4px;}
+.wl-price{font-size:.9rem;font-weight:600;color:var(--accent2);}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:30px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--accent);color:#fff;
+  padding:12px 22px;border-radius:30px;
+  font-size:.85rem;font-weight:500;
+  z-index:1000;transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── USER MENU ── */
+.user-menu{
+  position:absolute;top:calc(var(--nav-h) + 4px);right:40px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:8px;min-width:200px;
+  box-shadow:var(--shadow-lg);
+  display:none;z-index:600;
+}
+.user-menu.open{display:block;animation:fadeIn .2s ease;}
+.um-header{padding:10px 12px 12px;border-bottom:1px solid var(--border);margin-bottom:4px;}
+.um-name{font-weight:600;font-size:.9rem;}
+.um-email{font-size:.76rem;color:var(--text2);}
+.um-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:10px;
+  font-size:.85rem;cursor:pointer;
+  transition:background .15s;
+  border:none;background:none;color:var(--text);
+  width:100%;text-align:left;
+}
+.um-item:hover{background:var(--surface2);}
+.um-item.danger{color:var(--danger);}
+
+/* ── PROMO BANNER ── */
+.promo-banner{
+  margin:0 40px 32px;
+  background:linear-gradient(135deg,#0066cc,#00a3ff);
+  border-radius:20px;padding:32px 40px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+  position:relative;overflow:hidden;
+}
+.promo-banner::before{
+  content:'';position:absolute;right:-40px;top:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(255,255,255,0.08);
+}
+.promo-banner::after{
+  content:'';position:absolute;right:40px;bottom:-60px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(255,255,255,0.05);
+}
+.promo-text h3{font-family:var(--font-serif);font-size:1.6rem;color:#fff;margin-bottom:6px;}
+.promo-text p{font-size:.88rem;color:rgba(255,255,255,0.8);}
+.promo-btn{
+  padding:12px 24px;border-radius:20px;border:none;
+  background:#fff;color:#0066cc;
+  font-family:var(--font);font-size:.88rem;font-weight:600;
+  cursor:pointer;z-index:1;position:relative;
+  transition:transform .2s;
+}
+.promo-btn:hover{transform:scale(1.03);}
+
+/* ── COMPARE ── */
+.compare-bar{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;
+  border-radius:20px;padding:12px 24px;
+  display:none;align-items:center;gap:16px;z-index:700;
+  box-shadow:0 8px 30px rgba(0,0,0,0.2);
+  animation:slideUp .3s ease;
+}
+.compare-bar.show{display:flex;}
+.compare-items{display:flex;gap:8px;}
+.compare-thumb{
+  width:36px;height:36px;border-radius:8px;overflow:hidden;
+  border:2px solid rgba(255,255,255,0.4);
+}
+.compare-thumb img{width:100%;height:100%;object-fit:cover;}
+.compare-btn-clear{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 14px;border-radius:12px;font-size:.8rem;cursor:pointer;}
+.compare-btn-go{background:#fff;color:var(--accent);border:none;padding:6px 14px;border-radius:12px;font-size:.8rem;font-weight:600;cursor:pointer;}
+
+/* ── SKELETON ── */
+.skeleton{
+  background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:8px;
+}
+@keyframes shimmer{from{background-position:200% 0;}to{background-position:-200% 0;}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .nav-center{display:none;}
+  .hero{padding:50px 20px 40px;}
+  .filter-bar,.search-bar-wrap,.grid-wrap{padding-left:20px;padding-right:20px;}
+  .promo-banner{margin:0 20px 24px;padding:24px;}
+  .cart-panel{width:100vw;}
+}
+@media(max-width:480px){
+  .user-menu{right:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">APEX</div>
+  <div class="nav-center">
+    <a onclick="scrollToGrid()">สินค้า</a>
+    <a onclick="openWishlist()">สิ่งที่อยากได้</a>
+    <a>โปรโมชั่น</a>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn" title="ค้นหา" onclick="document.getElementById('searchInput').focus()">🔍</button>
+    <button class="icon-btn" title="Dark Mode" onclick="toggleDark()">🌙</button>
+    <button class="icon-btn" title="Wishlist" onclick="openWishlist()">
+      ♡
+      <span class="badge" id="wlBadge">0</span>
+    </button>
+    <button class="icon-btn" title="ตะกร้า" onclick="openCart()">
+      🛒
+      <span class="badge" id="cartBadge">0</span>
+    </button>
+    <button class="nav-user-btn" id="navUserBtn" onclick="handleUserClick()">เข้าสู่ระบบ</button>
+  </div>
+</nav>
+
+<!-- User Menu -->
+<div class="user-menu" id="userMenu">
+  <div class="um-header">
+    <div class="um-name" id="umName"></div>
+    <div class="um-email" id="umEmail"></div>
+  </div>
+  <button class="um-item" onclick="openWishlist();closeUserMenu()">♡ สิ่งที่อยากได้</button>
+  <button class="um-item" onclick="showToast('📦 ออเดอร์ของคุณ: 3 รายการ');closeUserMenu()">📦 คำสั่งซื้อ</button>
+  <button class="um-item" onclick="showToast('⚙️ หน้าตั้งค่า');closeUserMenu()">⚙️ ตั้งค่า</button>
+  <button class="um-item danger" onclick="logout()">ออกจากระบบ</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">New Arrivals 2025</div>
+  <h1>สัมผัสนวัตกรรม<br><em>เหนือระดับ</em></h1>
+  <p>เลือกสรรสมาร์ทโฟนพรีเมียมจากแบรนด์ชั้นนำ พร้อมบริการหลังการขายระดับโลก</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="scrollToGrid()">ดูสินค้าทั้งหมด</button>
+    <button class="btn-ghost" onclick="document.getElementById('authOverlay').classList.add('open')">สมัครสมาชิก</button>
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <div class="promo-text">
+    <h3>ผ่อน 0% นาน 24 เดือน</h3>
+    <p>สั่งซื้อวันนี้ รับส่วนลดเพิ่มอีก 5% สำหรับสมาชิก APEX Pro</p>
+  </div>
+  <button class="promo-btn" onclick="document.getElementById('authOverlay').classList.add('open')">รับสิทธิ์เลย</button>
+</div>
+
+<!-- SEARCH -->
+<div class="search-bar-wrap">
+  <input class="search-input" id="searchInput" type="text" placeholder="🔍  ค้นหาสมาร์ทโฟน รุ่น หรือคุณสมบัติ..." oninput="filterProducts()">
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">แบรนด์:</span>
+  <button class="filter-chip active" onclick="setFilter('all',this)">ทั้งหมด</button>
+  <button class="filter-chip" onclick="setFilter('Apple',this)">Apple</button>
+  <button class="filter-chip" onclick="setFilter('Samsung',this)">Samsung</button>
+  <button class="filter-chip" onclick="setFilter('Google',this)">Google</button>
+  <button class="filter-chip" onclick="setFilter('Xiaomi',this)">Xiaomi</button>
+  <button class="filter-chip" onclick="setFilter('OPPO',this)">OPPO</button>
+  <select class="sort-select" onchange="sortProducts(this.value)">
+    <option value="default">เรียงตาม: แนะนำ</option>
+    <option value="price-asc">ราคา: น้อย → มาก</option>
+    <option value="price-desc">ราคา: มาก → น้อย</option>
+    <option value="rating">คะแนนสูงสุด</option>
+    <option value="new">ใหม่ล่าสุด</option>
+  </select>
+</div>
+
+<!-- GRID -->
+<div class="grid-wrap" id="gridSection">
+  <div class="grid-label" id="gridLabel">สินค้าทั้งหมด</div>
+  <div class="product-grid" id="productGrid"></div>
+</div>
+
+<!-- COMPARE BAR -->
+<div class="compare-bar" id="compareBar">
+  <span style="font-size:.85rem;font-weight:500;">เปรียบเทียบ</span>
+  <div class="compare-items" id="compareItems"></div>
+  <button class="compare-btn-clear" onclick="clearCompare()">ล้าง</button>
+  <button class="compare-btn-go" onclick="doCompare()">เปรียบเทียบ →</button>
+</div>
+
+<!-- DETAIL OVERLAY -->
+<div class="overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-modal" id="detailModal">
+    <button class="dm-close" onclick="document.getElementById('detailOverlay').classList.remove('open')">✕</button>
+    <div class="dm-inner" id="detailInner"></div>
+  </div>
+</div>
+
+<!-- AUTH OVERLAY -->
+<div class="overlay" id="authOverlay" onclick="closeAuth(event)">
+  <div class="auth-modal">
+    <button class="auth-close" onclick="document.getElementById('authOverlay').classList.remove('open')">✕</button>
+    <div class="auth-logo">APEX</div>
+    <p class="auth-sub">สินค้าระดับพรีเมียม เพื่อคุณโดยเฉพาะ</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login',this)">เข้าสู่ระบบ</button>
+      <button class="auth-tab" onclick="switchTab('register',this)">สมัครสมาชิก</button>
+    </div>
+    <div id="authError" class="auth-error"></div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label class="form-label">อีเมล</label>
+        <input class="form-input" id="loginEmail" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">รหัสผ่าน</label>
+        <input class="form-input" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="auth-submit" onclick="doLogin()">เข้าสู่ระบบ</button>
+      <div class="auth-divider">หรือ</div>
+      <button class="social-btn" onclick="socialLogin('Google')">🌐 &nbsp;เข้าสู่ระบบด้วย Google</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="registerForm" style="display:none">
+      <div class="form-group">
+        <label class="form-label">ชื่อ-นามสกุล</label>
+        <input class="form-input" id="regName" type="text" placeholder="สมชาย ใจดี">
+      </div>
+      <div class="form-group">
+        <label class="form-label">อีเมล</label>
+        <input class="form-input" id="regEmail" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">รหัสผ่าน</label>
+        <input class="form-input" id="regPass" type="password" placeholder="อย่างน้อย 6 ตัวอักษร">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ยืนยันรหัสผ่าน</label>
+        <input class="form-input" id="regPass2" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <button class="auth-submit" onclick="doRegister()">สร้างบัญชี</button>
+    </div>
+  </div>
+</div>
+
+<!-- WISHLIST OVERLAY -->
+<div class="overlay" id="wlOverlay" onclick="closeWL(event)">
+  <div class="wishlist-modal">
+    <button style="position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;background:var(--surface2);border:none;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;" onclick="document.getElementById('wlOverlay').classList.remove('open')">✕</button>
+    <div class="wl-title">♡ สิ่งที่อยากได้</div>
+    <div id="wlContent"></div>
+  </div>
+</div>
+
+<!-- CART PANEL -->
+<div class="cart-bg" id="cartBg" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <div class="cart-title">ตะกร้าสินค้า</div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
+const PHONES = [
+  {
+    id:1, brand:'Apple', name:'iPhone 16 Pro Max', price:54900, oldPrice:57900,
+    rating:5, reviews:2341, badge:'new',
+    img:'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600',
+    desc:'ชิป A18 Pro ที่แรงที่สุดในประวัติศาสตร์ กล้อง 48MP Fusion พร้อม Camera Control และหน้าจอ ProMotion 6.9 นิ้ว',
+    colors:[{name:'Desert Titanium',hex:'#d4b896'},{name:'Black Titanium',hex:'#3a3a3c'},{name:'White Titanium',hex:'#f0efe9'},{name:'Natural Titanium',hex:'#a8a49e'}],
+    storage:['256GB','512GB','1TB'],
+    specs:{Display:'6.9" Super Retina XDR',Chip:'A18 Pro',Camera:'48MP Fusion',Battery:'4,685 mAh',OS:'iOS 18'},
+    isNew:true,
+  },
+  {
+    id:2, brand:'Apple', name:'iPhone 16', price:34900, oldPrice:null,
+    rating:4, reviews:1892, badge:null,
+    img:'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600',
+    desc:'iPhone ที่ทรงพลังที่สุดในรุ่นมาตรฐาน พร้อม Action Button และ Camera Control ใหม่',
+    colors:[{name:'Black',hex:'#1c1c1e'},{name:'White',hex:'#f5f5f0'},{name:'Ultramarine',hex:'#3b4f8c'},{name:'Teal',hex:'#3a8b7c'},{name:'Pink',hex:'#e8a4b0'}],
+    storage:['128GB','256GB','512GB'],
+    specs:{Display:'6.1" Super Retina XDR',Chip:'A18',Camera:'48MP Fusion',Battery:'3,561 mAh',OS:'iOS 18'},
+  },
+  {
+    id:3, brand:'Samsung', name:'Galaxy S25 Ultra', price:49900, oldPrice:52900,
+    rating:5, reviews:1540, badge:'hot',
+    img:'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=600',
+    desc:'Galaxy AI ล่าสุด พร้อม S Pen ในตัว กล้อง 200MP และหน้าจอ Dynamic AMOLED 2X 6.9 นิ้ว',
+    colors:[{name:'Titanium Black',hex:'#2a2a2e'},{name:'Titanium Gray',hex:'#8e8e8e'},{name:'Titanium White',hex:'#f0f0ea'},{name:'Titanium Blue',hex:'#4a6fa5'}],
+    storage:['256GB','512GB','1TB'],
+    specs:{Display:'6.9" Dynamic AMOLED 2X',Chip:'Snapdragon 8 Elite',Camera:'200MP',Battery:'5,000 mAh',OS:'Android 15'},
+  },
+  {
+    id:4, brand:'Samsung', name:'Galaxy Z Fold 6', price:62900, oldPrice:65900,
+    rating:4, reviews:892, badge:'sale',
+    img:'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600',
+    desc:'สมาร์ทโฟนหน้าจอพับได้ที่บางที่สุดและเบาที่สุด พร้อมหน้าจอภายใน 7.6 นิ้ว',
+    colors:[{name:'Navy',hex:'#1a2d5a'},{name:'Silver Shadow',hex:'#c0c0c0'},{name:'Pink',hex:'#e8a4b0'}],
+    storage:['256GB','512GB'],
+    specs:{Display:'7.6" Foldable AMOLED',Chip:'Snapdragon 8 Gen 3',Camera:'50MP',Battery:'4,400 mAh',OS:'Android 14'},
+  },
+  {
+    id:5, brand:'Google', name:'Pixel 9 Pro', price:38900, oldPrice:null,
+    rating:5, reviews:1203, badge:'new',
+    img:'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600',
+    desc:'Google AI ในตัว Gemini Nano พร้อมกล้อง Zeiss ที่ได้รับรางวัล และอัปเดต 7 ปี',
+    colors:[{name:'Obsidian',hex:'#1a1a1e'},{name:'Porcelain',hex:'#f5f0e8'},{name:'Hazel',hex:'#7a8c5a'},{name:'Rose Quartz',hex:'#d4a0a8'}],
+    storage:['128GB','256GB','512GB','1TB'],
+    specs:{Display:'6.3" LTPO OLED',Chip:'Tensor G4',Camera:'50MP Zeiss',Battery:'4,700 mAh',OS:'Android 15'},
+  },
+  {
+    id:6, brand:'Xiaomi', name:'Xiaomi 14 Ultra', price:32900, oldPrice:34900,
+    rating:4, reviews:768, badge:null,
+    img:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600',
+    desc:'กล้อง Leica Summilux ที่ดีที่สุดใน Android พร้อม Snapdragon 8 Gen 3 และชาร์จ 90W',
+    colors:[{name:'Black',hex:'#1a1a1a'},{name:'White',hex:'#f5f5f0'},{name:'Titanium',hex:'#9a9a9a'}],
+    storage:['256GB','512GB','1TB'],
+    specs:{Display:'6.73" AMOLED',Chip:'Snapdragon 8 Gen 3',Camera:'50MP Leica',Battery:'5,000 mAh',OS:'Android 14'},
+  },
+  {
+    id:7, brand:'OPPO', name:'Find X8 Pro', price:28900, oldPrice:31900,
+    rating:4, reviews:542, badge:'sale',
+    img:'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=600',
+    desc:'กล้อง Hasselblad พร้อมซูม periscope 6× และแบตเตอรี่ 5,910 mAh ชาร์จ 80W',
+    colors:[{name:'Nebula Black',hex:'#2a2a3e'},{name:'Comet Grey',hex:'#6e6e7a'},{name:'Pearl White',hex:'#f0ece8'}],
+    storage:['256GB','512GB'],
+    specs:{Display:'6.78" BOE X1 AMOLED',Chip:'Dimensity 9400',Camera:'50MP Hasselblad',Battery:'5,910 mAh',OS:'Android 15'},
+  },
+  {
+    id:8, brand:'Samsung', name:'Galaxy A55', price:14900, oldPrice:null,
+    rating:4, reviews:2891, badge:null,
+    img:'https://images.unsplash.com/photo-1567581935884-3349723552ca?w=600',
+    desc:'ราคาคุ้มค่า ดีไซน์พรีเมียม พร้อมกล้อง 50MP OIS และหน้าจอ Super AMOLED 120Hz',
+    colors:[{name:'Awesome Iceblue',hex:'#a0c8d8'},{name:'Awesome Lilac',hex:'#c8a0c8'},{name:'Awesome Navy',hex:'#1a2d5a'},{name:'Awesome Lemon',hex:'#f0e870'}],
+    storage:['128GB','256GB'],
+    specs:{Display:'6.6" Super AMOLED',Chip:'Exynos 1480',Camera:'50MP OIS',Battery:'5,000 mAh',OS:'Android 14'},
+  }
+];
+
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let cart = {};          // {phoneId: {qty, color, storage}}
+let wishlist = new Set();
+let compareList = [];
+let currentFilter = 'all';
+let currentSort = 'default';
+let currentSearch = '';
+let user = null;        // {name, email}
+let selectedColors = {};
+let selectedStorage = {};
+let detailState = {};   // per-product selection in detail modal
+
+/* ══════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════ */
+const USERS_KEY = 'apex_users';
+const SESSION_KEY = 'apex_session';
+
+function getUsers(){ return JSON.parse(localStorage.getItem(USERS_KEY)||'[]'); }
+function saveUsers(u){ localStorage.setItem(USERS_KEY,JSON.stringify(u)); }
+
+function loadSession(){
+  const s = sessionStorage.getItem(SESSION_KEY);
+  if(s){ user=JSON.parse(s); updateNavUser(); }
+}
+
+function handleUserClick(){
+  if(user){ toggleUserMenu(); }
+  else{ document.getElementById('authOverlay').classList.add('open'); }
+}
+
+function toggleUserMenu(){
+  const m=document.getElementById('userMenu');
+  m.classList.toggle('open');
+  if(m.classList.contains('open')){
+    document.getElementById('umName').textContent=user.name;
+    document.getElementById('umEmail').textContent=user.email;
+    setTimeout(()=>document.addEventListener('click',closeUserMenuOut),0);
+  }
+}
+function closeUserMenu(){ document.getElementById('userMenu').classList.remove('open'); }
+function closeUserMenuOut(e){
+  if(!document.getElementById('userMenu').contains(e.target)&&e.target!==document.getElementById('navUserBtn')){
+    closeUserMenu();
+    document.removeEventListener('click',closeUserMenuOut);
+  }
+}
+
+function switchTab(tab, btn){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('loginForm').style.display = tab==='login'?'block':'none';
+  document.getElementById('registerForm').style.display = tab==='register'?'block':'none';
+  document.getElementById('authError').style.display='none';
+}
+
+function showAuthError(msg){
+  const e=document.getElementById('authError');
+  e.textContent=msg; e.style.display='block';
+}
+
+function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  if(!email||!pass){ showAuthError('กรุณากรอกอีเมลและรหัสผ่าน'); return; }
+  const users=getUsers();
+  const found=users.find(u=>u.email===email&&u.pass===pass);
+  if(!found){ showAuthError('อีเมลหรือรหัสผ่านไม่ถูกต้อง'); return; }
+  loginSuccess(found);
+}
+
+function doRegister(){
+  const name=document.getElementById('regName').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const pass=document.getElementById('regPass').value;
+  const pass2=document.getElementById('regPass2').value;
+  if(!name||!email||!pass){ showAuthError('กรุณากรอกข้อมูลให้ครบ'); return; }
+  if(pass.length<6){ showAuthError('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'); return; }
+  if(pass!==pass2){ showAuthError('รหัสผ่านไม่ตรงกัน'); return; }
+  const users=getUsers();
+  if(users.find(u=>u.email===email)){ showAuthError('อีเมลนี้ถูกใช้แล้ว'); return; }
+  const newUser={name,email,pass};
+  users.push(newUser);
+  saveUsers(users);
+  loginSuccess(newUser);
+}
+
+function socialLogin(provider){
+  const u={name:provider+' User',email:'user@'+provider.toLowerCase()+'.com'};
+  loginSuccess(u);
+}
+
+function loginSuccess(u){
+  user={name:u.name,email:u.email};
+  sessionStorage.setItem(SESSION_KEY,JSON.stringify(user));
+  document.getElementById('authOverlay').classList.remove('open');
+  updateNavUser();
+  showToast('🎉 ยินดีต้อนรับ '+user.name+'!');
+}
+
+function logout(){
+  user=null;
+  sessionStorage.removeItem(SESSION_KEY);
+  closeUserMenu();
+  updateNavUser();
+  showToast('ออกจากระบบแล้ว');
+}
+
+function updateNavUser(){
+  const btn=document.getElementById('navUserBtn');
+  btn.textContent=user ? user.name.split(' ')[0] : 'เข้าสู่ระบบ';
+}
+
+function closeAuth(e){
+  if(e.target===document.getElementById('authOverlay'))
+    document.getElementById('authOverlay').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════
+   RENDER PRODUCTS
+══════════════════════════════════════════ */
+function getFilteredSorted(){
+  let list=[...PHONES];
+  if(currentFilter!=='all') list=list.filter(p=>p.brand===currentFilter);
+  if(currentSearch) list=list.filter(p=>(p.brand+' '+p.name).toLowerCase().includes(currentSearch.toLowerCase()));
+  if(currentSort==='price-asc') list.sort((a,b)=>a.price-b.price);
+  else if(currentSort==='price-desc') list.sort((a,b)=>b.price-a.price);
+  else if(currentSort==='rating') list.sort((a,b)=>b.rating-a.rating||b.reviews-a.reviews);
+  else if(currentSort==='new') list.sort((a,b)=>b.id-a.id);
+  return list;
+}
+
+function renderGrid(){
+  const list=getFilteredSorted();
+  const grid=document.getElementById('productGrid');
+  document.getElementById('gridLabel').textContent=
+    `แสดง ${list.length} รายการ`+(currentFilter!=='all'?' · '+currentFilter:'');
+
+  if(!list.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text2)">
+      <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+      <div>ไม่พบสินค้าที่ตรงกับการค้นหา</div></div>`;
+    return;
+  }
+
+  grid.innerHTML=list.map((p,i)=>{
+    const selColor=selectedColors[p.id]||0;
+    const stars='★'.repeat(p.rating)+'☆'.repeat(5-p.rating);
+    const colorDots=p.colors.map((c,ci)=>`
+      <div class="color-dot${ci===selColor?' selected':''}"
+           style="background:${c.hex}"
+           onclick="event.stopPropagation();selectColor(${p.id},${ci},this)"
+           title="${c.name}"></div>`).join('');
+    const inWL=wishlist.has(p.id);
+    return `
+    <div class="p-card" style="animation-delay:${i*0.05}s" onclick="openDetail(${p.id})">
+      <div class="p-card-img">
+        <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="fallback" style="display:none">📱</div>
+        ${p.badge?`<span class="p-badge ${p.badge}">${p.badge==='new'?'ใหม่':p.badge==='hot'?'ขายดี':'ลด'}</span>`:''}
+        <button class="wishlist-btn${inWL?' active':''}" onclick="event.stopPropagation();toggleWishlist(${p.id},this)" title="บันทึก">
+          ${inWL?'♥':'♡'}
+        </button>
+      </div>
+      <div class="p-card-body">
+        <div class="p-brand">${p.brand}</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-stars">${stars} <span>${p.reviews.toLocaleString()} รีวิว</span></div>
+        <div class="color-dots">${colorDots}</div>
+        <div class="p-card-footer">
+          <div class="p-price-wrap">
+            ${p.oldPrice?`<div class="p-price-old">฿${p.oldPrice.toLocaleString()}</div>`:''}
+            <div class="p-price">฿${p.price.toLocaleString()}</div>
+          </div>
+          <button class="add-btn" onclick="event.stopPropagation();quickAdd(${p.id})" title="เพิ่มลงตะกร้า">+</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════
+   FILTER / SORT / SEARCH
+══════════════════════════════════════════ */
+function setFilter(brand,btn){
+  currentFilter=brand;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+function sortProducts(val){ currentSort=val; renderGrid(); }
+function filterProducts(){ currentSearch=document.getElementById('searchInput').value; renderGrid(); }
+function scrollToGrid(){ document.getElementById('gridSection').scrollIntoView({behavior:'smooth'}); }
+
+/* ══════════════════════════════════════════
+   COLOR SELECT (on card)
+══════════════════════════════════════════ */
+function selectColor(pid,idx,el){
+  selectedColors[pid]=idx;
+  const card=el.closest('.p-card');
+  card.querySelectorAll('.color-dot').forEach((d,i)=>d.classList.toggle('selected',i===idx));
+}
+
+/* ══════════════════════════════════════════
+   WISHLIST
+══════════════════════════════════════════ */
+function toggleWishlist(id,btn){
+  if(wishlist.has(id)){
+    wishlist.delete(id);
+    btn.classList.remove('active');
+    btn.textContent='♡';
+    showToast('ลบออกจากรายการแล้ว');
+  } else {
+    wishlist.add(id);
+    btn.classList.add('active');
+    btn.textContent='♥';
+    showToast('♥ บันทึกแล้ว!');
+  }
+  updateWLBadge();
+}
+function updateWLBadge(){
+  const b=document.getElementById('wlBadge');
+  b.textContent=wishlist.size;
+  b.classList.toggle('show',wishlist.size>0);
+}
+function openWishlist(){
+  const phones=[...wishlist].map(id=>PHONES.find(p=>p.id===id)).filter(Boolean);
+  const content=document.getElementById('wlContent');
+  if(!phones.length){
+    content.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text2)"><div style="font-size:3rem;margin-bottom:12px">♡</div><div>ยังไม่มีสินค้าที่บันทึกไว้</div></div>`;
+  } else {
+    content.innerHTML=`<div class="wl-grid">${phones.map(p=>`
+      <div class="wl-card" onclick="document.getElementById('wlOverlay').classList.remove('open');openDetail(${p.id})">
+        <img class="wl-img" src="${p.img}" alt="${p.name}" onerror="this.src=''">
+        <div class="wl-info">
+          <div class="wl-name">${p.name}</div>
+          <div class="wl-price">฿${p.price.toLocaleString()}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+  document.getElementById('wlOverlay').classList.add('open');
+}
+function closeWL(e){ if(e.target===document.getElementById('wlOverlay'))document.getElementById('wlOverlay').classList.remove('open'); }
+
+/* ══════════════════════════════════════════
+   DETAIL MODAL
+══════════════════════════════════════════ */
+function openDetail(id){
+  const p=PHONES.find(x=>x.id===id);
+  if(!p)return;
+  if(!detailState[id]) detailState[id]={color:0,storage:0};
+  const ds=detailState[id];
+
+  const colorHTML=p.colors.map((c,i)=>`
+    <div class="color-option${i===ds.color?' selected':''}" onclick="detailSelectColor(${id},${i})">
+      <div class="swatch" style="background:${c.hex}"></div>
+      <span>${c.name}</span>
+    </div>`).join('');
+
+  const storageHTML=p.storage.map((s,i)=>`
+    <button class="storage-btn${i===ds.storage?' selected':''}" onclick="detailSelectStorage(${id},${i})">${s}</button>`).join('');
+
+  const specRows=Object.entries(p.specs).map(([k,v])=>`
+    <div class="spec-row"><span class="spec-key">${k}</span><span class="spec-val">${v}</span></div>`).join('');
+
+  const stars='★'.repeat(p.rating)+'☆'.repeat(5-p.rating);
+  const inCompare=compareList.includes(id);
+
+  document.getElementById('detailInner').innerHTML=`
+    <div class="dm-img">
+      <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'">
+    </div>
+    <div class="dm-info">
+      <div class="dm-brand">${p.brand}</div>
+      <div class="dm-name">${p.name}</div>
+      <div class="dm-stars">${stars} <span style="color:var(--text2);font-size:.8rem">(${p.reviews.toLocaleString()} รีวิว)</span></div>
+      <div class="dm-desc">${p.desc}</div>
+
+      <div class="dm-section-label">เลือกสี</div>
+      <div class="color-options" id="dm-colors-${id}">${colorHTML}</div>
+
+      <div class="dm-section-label">ความจุ</div>
+      <div class="storage-options" id="dm-storage-${id}">${storageHTML}</div>
+
+      <div class="dm-price-row">
+        <div class="dm-price" id="dm-price-${id}">฿${calcPrice(p,ds.storage).toLocaleString()}</div>
+        ${p.oldPrice?`<div class="dm-price-old">฿${p.oldPrice.toLocaleString()}</div>`:''}
+      </div>
+      <div class="dm-installment">ผ่อน 0% นาน 24 เดือน ≈ ฿${Math.round(calcPrice(p,ds.storage)/24).toLocaleString()}/เดือน</div>
+
+      <div class="dm-actions" style="margin-top:20px">
+        <button class="dm-add-btn" onclick="addFromDetail(${id})">🛒 เพิ่มลงตะกร้า</button>
+        <button class="dm-wishlist-btn" onclick="toggleWishlistDetail(${id})">
+          ${wishlist.has(id)?'♥ บันทึกแล้ว':'♡ บันทึก'}
+        </button>
+        <button class="dm-wishlist-btn" onclick="toggleCompare(${id})" style="${inCompare?'background:var(--accent2);color:#fff;border-color:var(--accent2)':''}">
+          ${inCompare?'✓ อยู่ในรายการเปรียบเทียบ':'⊕ เปรียบเทียบ'}
+        </button>
+      </div>
+
+      <div class="dm-specs">
+        <div class="dm-section-label" style="margin-bottom:12px">สเปค</div>
+        ${specRows}
+      </div>
+    </div>`;
+
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function calcPrice(p, storageIdx){
+  const premiums=[0,3000,8000,15000];
+  return p.price+(premiums[storageIdx]||0);
+}
+
+function detailSelectColor(pid,idx){
+  detailState[pid].color=idx;
+  const wrap=document.getElementById('dm-colors-'+pid);
+  wrap.querySelectorAll('.color-option').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+}
+
+function detailSelectStorage(pid,idx){
+  detailState[pid].storage=idx;
+  const wrap=document.getElementById('dm-storage-'+pid);
+  wrap.querySelectorAll('.storage-btn').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+  const p=PHONES.find(x=>x.id===pid);
+  document.getElementById('dm-price-'+pid).textContent='฿'+calcPrice(p,idx).toLocaleString();
+}
+
+function addFromDetail(id){
+  const p=PHONES.find(x=>x.id===id);
+  const ds=detailState[id]||{color:0,storage:0};
+  const color=p.colors[ds.color].name;
+  const storage=p.storage[ds.storage];
+  const key=`${id}_${color}_${storage}`;
+  if(!cart[key]) cart[key]={phone:p,color,storage,qty:0,price:calcPrice(p,ds.storage)};
+  cart[key].qty++;
+  updateCartBadge();
+  showToast(`✓ เพิ่ม ${p.name} (${color}, ${storage})`);
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+
+function quickAdd(id){
+  const p=PHONES.find(x=>x.id===id);
+  const colorIdx=selectedColors[id]||0;
+  const color=p.colors[colorIdx].name;
+  const storage=p.storage[0];
+  const key=`${id}_${color}_${storage}`;
+  if(!cart[key]) cart[key]={phone:p,color,storage,qty:0,price:p.price};
+  cart[key].qty++;
+  updateCartBadge();
+  showToast(`✓ ${p.name} · ${color} · ${storage}`);
+}
+
+function toggleWishlistDetail(id){
+  const inWL=wishlist.has(id);
+  if(inWL){ wishlist.delete(id); showToast('ลบออกจากรายการแล้ว'); }
+  else{ wishlist.add(id); showToast('♥ บันทึกแล้ว!'); }
+  updateWLBadge();
+  // update button text
+  const btn=document.querySelector('.dm-wishlist-btn');
+  if(btn) btn.textContent=wishlist.has(id)?'♥ บันทึกแล้ว':'♡ บันทึก';
+  renderGrid();
+}
+
+function closeDetail(e){
+  if(e.target===document.getElementById('detailOverlay'))
+    document.getElementById('detailOverlay').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════
+   COMPARE
+══════════════════════════════════════════ */
+function toggleCompare(id){
+  if(compareList.includes(id)){
+    compareList=compareList.filter(x=>x!==id);
+  } else {
+    if(compareList.length>=3){ showToast('เปรียบเทียบได้สูงสุด 3 รุ่น'); return; }
+    compareList.push(id);
+  }
+  updateCompareBar();
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+
+function updateCompareBar(){
+  const bar=document.getElementById('compareBar');
+  bar.classList.toggle('show',compareList.length>=2);
+  document.getElementById('compareItems').innerHTML=compareList.map(id=>{
+    const p=PHONES.find(x=>x.id===id);
+    return `<div class="compare-thumb"><img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'"></div>`;
+  }).join('');
+}
+
+function clearCompare(){ compareList=[]; updateCompareBar(); }
+
+function doCompare(){
+  const phones=compareList.map(id=>PHONES.find(p=>p.id===id));
+  const specKeys=[...new Set(phones.flatMap(p=>Object.keys(p.specs)))];
+  const cols=phones.map(p=>`<th style="padding:12px;text-align:center;font-weight:600">${p.name}</th>`).join('');
+  const rows=specKeys.map(k=>`
+    <tr>
+      <td style="padding:10px 12px;color:var(--text2);font-size:.85rem">${k}</td>
+      ${phones.map(p=>`<td style="padding:10px 12px;text-align:center;font-size:.85rem">${p.specs[k]||'—'}</td>`).join('')}
+    </tr>`).join('');
+  const priceRow=`<tr style="border-top:2px solid var(--border)">
+    <td style="padding:12px;font-weight:700">ราคา</td>
+    ${phones.map(p=>`<td style="padding:12px;text-align:center;font-weight:700;color:var(--accent2)">฿${p.price.toLocaleString()}</td>`).join('')}
+  </tr>`;
+  document.getElementById('detailInner').innerHTML=`
+    <div style="grid-column:1/-1;padding:32px;overflow-x:auto">
+      <button style="margin-bottom:20px;background:none;border:none;color:var(--accent2);cursor:pointer;font-size:.9rem" onclick="clearCompare();document.getElementById('detailOverlay').classList.remove('open')">← กลับ</button>
+      <h2 style="font-family:var(--font-serif);margin-bottom:20px">เปรียบเทียบ ${phones.length} รุ่น</h2>
+      <table style="width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:14px;overflow:hidden">
+        <thead style="background:var(--surface2)"><tr><th style="padding:12px;text-align:left;width:120px">สเปค</th>${cols}</tr></thead>
+        <tbody>${rows}${priceRow}</tbody>
+      </table>
+      <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
+        ${phones.map(p=>`<button class="btn-primary" onclick="addFromCompare(${p.id})">เพิ่ม ${p.name.split(' ')[1]} ลงตะกร้า</button>`).join('')}
+      </div>
+    </div>`;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function addFromCompare(id){
+  quickAdd(id);
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════
+   CART
+══════════════════════════════════════════ */
+function updateCartBadge(){
+  const total=Object.values(cart).reduce((s,i)=>s+i.qty,0);
+  const b=document.getElementById('cartBadge');
+  b.textContent=total;
+  b.classList.toggle('show',total>0);
+}
+
+function openCart(){
+  renderCartPanel();
+  document.getElementById('cartPanel').classList.add('open');
+  document.getElementById('cartBg').classList.add('open');
+}
+function closeCart(){
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('cartBg').classList.remove('open');
+}
+
+function renderCartPanel(){
+  const items=Object.entries(cart).filter(([,v])=>v.qty>0);
+  const itemsEl=document.getElementById('cartItems');
+  const footerEl=document.getElementById('cartFooter');
+
+  if(!items.length){
+    itemsEl.innerHTML=`<div class="cart-empty">
+      <span class="cart-empty-icon">🛒</span>
+      <div style="font-weight:500;margin-bottom:6px">ตะกร้าว่างเปล่า</div>
+      <div style="font-size:.85rem;color:var(--text2)">เลือกสินค้าที่คุณชอบได้เลย</div>
+    </div>`;
+    footerEl.innerHTML='';
+    return;
+  }
+
+  let subtotal=0;
+  itemsEl.innerHTML=items.map(([key,item])=>{
+    subtotal+=item.price*item.qty;
+    return `
+    <div class="cart-item">
+      <div class="ci-img"><img src="${item.phone.img}" alt="${item.phone.name}" onerror="this.style.display='none'"></div>
+      <div class="ci-info">
+        <div class="ci-name">${item.phone.name}</div>
+        <div class="ci-meta">${item.color} · ${item.storage}</div>
+        <div class="ci-price">฿${(item.price*item.qty).toLocaleString()}</div>
+        <div class="ci-actions">
+          <button class="qty-btn" onclick="changeQty('${key}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${key}',1)">+</button>
+          <button class="ci-remove" onclick="removeItem('${key}')">ลบ</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const shipping=subtotal>=30000?0:200;
+  const total=subtotal+shipping;
+
+  footerEl.innerHTML=`
+    <div class="cart-summary">
+      <div class="cart-row"><span>ยอดรวม</span><span>฿${subtotal.toLocaleString()}</span></div>
+      <div class="cart-row"><span>ค่าจัดส่ง</span><span>${shipping===0?'ฟรี':'฿'+shipping}</span></div>
+      ${subtotal<30000?`<div style="font-size:.75rem;color:var(--accent2);margin-top:4px">ซื้อเพิ่ม ฿${(30000-subtotal).toLocaleString()} รับฟรีค่าส่ง</div>`:''}
+      <div class="cart-row total" style="margin-top:10px"><span>รวมทั้งสิ้น</span><span>฿${total.toLocaleString()}</span></div>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">ชำระเงิน →</button>`;
+}
+
+function changeQty(key,delta){
+  if(!cart[key])return;
+  cart[key].qty+=delta;
+  if(cart[key].qty<=0) delete cart[key];
+  updateCartBadge();
+  renderCartPanel();
+}
+function removeItem(key){ delete cart[key]; updateCartBadge(); renderCartPanel(); }
+
+function checkout(){
+  if(!user){ closeCart(); showToast('กรุณาเข้าสู่ระบบก่อนชำระเงิน'); document.getElementById('authOverlay').classList.add('open'); return; }
+  cart={};
+  updateCartBadge();
+  closeCart();
+  showToast('🎉 สั่งซื้อสำเร็จ! ขอบคุณที่ใช้บริการ APEX');
+}
+
+/* ══════════════════════════════════════════
+   DARK MODE / TOAST / UTILS
+══════════════════════════════════════════ */
+function toggleDark(){ document.body.classList.toggle('dark'); }
+
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+loadSession();
+renderGrid();
+</script>
+</body>
+</html>
